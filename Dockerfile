@@ -1,28 +1,45 @@
 FROM registry.hub.docker.com/library/debian:buster
 
+# Container build arguments
+ARG user_name=bas
+ENV CONTAINER_USER_NAME=$user_name
+
+ARG user_id=1000
+ENV CONTAINER_USER_ID=$user_id
+
+ARG user_home=/home/$user_name
+ENV CONTAINER_USER_HOME=$user_home
+
+# Install build tools and plugin dependencies
 RUN apt-get update && \
-    apt-get install -y \
+    DEBIAN_FRONTEND=noninteractive apt-get install -y \
         build-essential \
         cmake \
         curl \
+        kbd \
         git \
         libncurses-dev \
         libncurses6 \
         python3 \
         python3-dev
 
+# Install Vim
 WORKDIR /root
-RUN git clone https://github.com/vim/vim.git && \
-    cd vim/src                               && \
-    ./configure --enable-python3interp       && \
-    make install
+RUN git clone https://github.com/vim/vim.git   && \
+    cd vim/src                                 && \
+    ./configure --enable-python3interp         && \
+    make install                               && \
+    ln -s /usr/local/bin/vim /usr/local/bin/vi
+ENV EDITOR=vim
 
+# Install Golang
 ENV GOLANG_VERSION 1.12.5
 RUN curl -L https://golang.org/dl/go${GOLANG_VERSION}.linux-amd64.tar.gz | \
         tar -C /usr/local -xzf -
 ENV GOPATH /go
 ENV PATH $GOPATH/bin:/usr/local/go/bin:$PATH
 
+# Install vim-go plugin (Go)
 ENV VIM_GO_VERSION v1.20
 RUN git clone https://github.com/fatih/vim-go.git                           \
         /usr/local/share/vim/vim81/pack/plugins/start/vim-go             && \
@@ -30,9 +47,12 @@ RUN git clone https://github.com/fatih/vim-go.git                           \
     git checkout -b "release/${VIM_GO_VERSION}" "tags/${VIM_GO_VERSION}" && \
     vim -esN +GoInstallBinaries +q
 
+# Install YouCompleteMe plugin (Autocomplete)
+ENV VIM_YCM_VERSION dbcc3b0e14876fd4f39d38dfdef22351f74da3a5
 RUN git clone https://github.com/Valloric/YouCompleteMe.git              \
         /usr/local/share/vim/vim81/pack/plugins/start/YouCompleteMe   && \
     cd /usr/local/share/vim/vim81/pack/plugins/start/YouCompleteMe    && \
+    git checkout -b build "$VIM_YCM_VERSION"                          && \
     git config --file=.gitmodules submodule."third_party/ycmd".url       \
                                   https://github.com/bstaletic/ycmd   && \
     git config --file=.gitmodules submodule."third_party/ycmd".branch    \
@@ -42,21 +62,29 @@ RUN git clone https://github.com/Valloric/YouCompleteMe.git              \
     ( cd third_party/ycmd && git checkout gopls && git submodule update --init --recursive )  && \
     python3 ./install.py --go-completer
 
-RUN git clone https://github.com/tpope/vim-fugitive.git \
-        /usr/local/share/vim/vim81/pack/plugins/start/vim-fugitive
+# Install vim-fugitive (Git)
+ENV VIM_FUGITIVE_VERSION v2.5
+RUN git clone https://github.com/tpope/vim-fugitive.git                                 \
+        /usr/local/share/vim/vim81/pack/plugins/start/vim-fugitive                   && \
+    cd /usr/local/share/vim/vim81/pack/plugins/start/vim-fugitive                    && \
+    git checkout -b "release/${VIM_FUGITIVE_VERSION}" "tags/${VIM_FUGITIVE_VERSION}"
 
+# Install jellybeans (colorscheme)
 RUN curl -o /usr/local/share/vim/vim81/colors/jellybeans.vim \
         https://raw.githubusercontent.com/nanotech/jellybeans.vim/master/colors/jellybeans.vim
 
+# Vimrc
 COPY vimrc /usr/local/share/vim/vimrc
 
+# Generate Vim help pages
 RUN vim -esN +helptags\ /usr/local/share/vim/vim81/pack/plugins/start/vim-go/doc        \
              +helptags\ /usr/local/share/vim/vim81/pack/plugins/start/YouCompleteMe/doc \
              +helptags\ /usr/local/share/vim/vim81/pack/plugins/start/vim-fugitive/doc  \
              +q
 
-RUN /usr/sbin/useradd -u 1000 -U -d /home/bas -s /bin/bash bas && \
-	chown -R bas:bas /go
-USER bas
-
-ENV TERM xterm-256color
+# Create a local user matching the system user for toolbox style integration
+RUN /usr/sbin/useradd -u "$CONTAINER_USER_ID"                       \
+                      -U -d "$CONTAINER_USER_HOME"                  \
+                      -s /bin/bash "$CONTAINER_USER_NAME"        && \
+    chown -R "${CONTAINER_USER_ID}:${CONTAINER_USER_ID}" /go
+USER $CONTAINER_USER_NAME
