@@ -1,4 +1,8 @@
+# vi: set ft=dockerfile :
 FROM localhost/go-toolbox:latest
+
+ARG video_group=39
+ENV VIDEO_GROUP=$video_group
 
 ENV OPENCV_VERSION=4.1.0
 ENV OPENCV_URL=https://github.com/opencv/opencv/archive/${OPENCV_VERSION}.zip
@@ -23,7 +27,11 @@ RUN apt-get update                   && \
                        libjpeg-dev      \
                        libpng-dev       \
                        libtiff-dev      \
-                       libdc1394-22-dev
+                       libdc1394-22-dev \
+libsdl2-2.0-0 \
+libsdl2-dev \
+libsdl2-net-2.0-0 \
+libsdl2-net-dev
 
 # Download OpenCV source
 RUN mkdir /root/opencv                                  && \
@@ -54,6 +62,9 @@ RUN mkdir "/root/opencv/opencv-${OPENCV_VERSION}/build"                         
     make -j $(nproc --all)                                                                  && \
     make install
 
-USER bas
-
-RUN go get -v gocv.io/x/gocv
+# Update dynamic library path and add user to the Fedora video group (39)
+RUN ldconfig             && \
+    usermod -a -G 39 $CONTAINER_USER_NAME
+USER $CONTAINER_USER_NAME
+WORKDIR $CONTAINER_USER_HOME
+RUN HOME=/tmp go get -v gocv.io/x/gocv

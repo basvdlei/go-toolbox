@@ -16,7 +16,6 @@ RUN apt-get update && \
         build-essential \
         cmake \
         curl \
-        kbd \
         git \
         libncurses-dev \
         libncurses6 \
@@ -48,18 +47,14 @@ RUN git clone https://github.com/fatih/vim-go.git                           \
     vim -esN +GoInstallBinaries +q
 
 # Install YouCompleteMe plugin (Autocomplete)
-ENV VIM_YCM_VERSION dbcc3b0e14876fd4f39d38dfdef22351f74da3a5
+ENV VIM_YCM_VERSION 59eea79da8acaf4cd01631b15d6c762f9b9bdb14
 RUN git clone https://github.com/Valloric/YouCompleteMe.git              \
         /usr/local/share/vim/vim81/pack/plugins/start/YouCompleteMe   && \
     cd /usr/local/share/vim/vim81/pack/plugins/start/YouCompleteMe    && \
     git checkout -b build "$VIM_YCM_VERSION"                          && \
-    git config --file=.gitmodules submodule."third_party/ycmd".url       \
-                                  https://github.com/bstaletic/ycmd   && \
-    git config --file=.gitmodules submodule."third_party/ycmd".branch    \
-                                  gopls                               && \
     git submodule sync                                                && \
     git submodule update --init --recursive                           && \
-    ( cd third_party/ycmd && git checkout gopls && git submodule update --init --recursive )  && \
+    ( cd third_party/ycmd && git checkout fc7e7580dd5277ea432d0a4b538055445388bdbb && git submodule update --init --recursive )  && \
     python3 ./install.py --go-completer
 
 # Install vim-fugitive (Git)
