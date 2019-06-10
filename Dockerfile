@@ -20,7 +20,9 @@ RUN apt-get update && \
         libncurses-dev \
         libncurses6 \
         python3 \
-        python3-dev
+        python3-dev \
+	sudo && \
+   echo '%sudo	ALL=(ALL) NOPASSWD: ALL' > /etc/sudoers.d/root
 
 # Install Vim
 WORKDIR /root
@@ -79,7 +81,7 @@ RUN vim -esN +helptags\ /usr/local/share/vim/vim81/pack/plugins/start/vim-go/doc
 
 # Create a local user matching the system user for toolbox style integration
 RUN /usr/sbin/useradd -u "$CONTAINER_USER_ID"                       \
-                      -U -d "$CONTAINER_USER_HOME"                  \
+                      -U -Gsudo -d "$CONTAINER_USER_HOME"           \
                       -s /bin/bash "$CONTAINER_USER_NAME"        && \
     chown -R "${CONTAINER_USER_ID}:${CONTAINER_USER_ID}" /go
 USER $CONTAINER_USER_NAME
