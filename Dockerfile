@@ -34,14 +34,14 @@ RUN git clone https://github.com/vim/vim.git   && \
 ENV EDITOR=vim
 
 # Install Golang
-ENV GOLANG_VERSION 1.12.5
+ENV GOLANG_VERSION 1.13.1
 RUN curl -L https://golang.org/dl/go${GOLANG_VERSION}.linux-amd64.tar.gz | \
         tar -C /usr/local -xzf -
 ENV GOPATH /go
 ENV PATH $GOPATH/bin:/usr/local/go/bin:$PATH
 
 # Install vim-go plugin (Go)
-ENV VIM_GO_VERSION v1.20
+ENV VIM_GO_VERSION v1.21
 RUN git clone https://github.com/fatih/vim-go.git                           \
         /usr/local/share/vim/vim81/pack/plugins/start/vim-go             && \
     cd /usr/local/share/vim/vim81/pack/plugins/start/vim-go              && \
@@ -49,18 +49,17 @@ RUN git clone https://github.com/fatih/vim-go.git                           \
     vim -esN +GoInstallBinaries +q
 
 # Install YouCompleteMe plugin (Autocomplete)
-ENV VIM_YCM_VERSION 59eea79da8acaf4cd01631b15d6c762f9b9bdb14
+ENV VIM_YCM_VERSION bdbfdd938fe711ff75155546fc0a0e0bebcb952a
 RUN git clone https://github.com/Valloric/YouCompleteMe.git              \
         /usr/local/share/vim/vim81/pack/plugins/start/YouCompleteMe   && \
     cd /usr/local/share/vim/vim81/pack/plugins/start/YouCompleteMe    && \
     git checkout -b build "$VIM_YCM_VERSION"                          && \
     git submodule sync                                                && \
     git submodule update --init --recursive                           && \
-    ( cd third_party/ycmd && git checkout fc7e7580dd5277ea432d0a4b538055445388bdbb && git submodule update --init --recursive )  && \
     python3 ./install.py --go-completer
 
 # Install vim-fugitive (Git)
-ENV VIM_FUGITIVE_VERSION v2.5
+ENV VIM_FUGITIVE_VERSION v3.0
 RUN git clone https://github.com/tpope/vim-fugitive.git                                 \
         /usr/local/share/vim/vim81/pack/plugins/start/vim-fugitive                   && \
     cd /usr/local/share/vim/vim81/pack/plugins/start/vim-fugitive                    && \
