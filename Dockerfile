@@ -25,57 +25,60 @@ RUN apt-get update && \
    echo '%sudo	ALL=(ALL) NOPASSWD: ALL' > /etc/sudoers.d/root
 
 # Install Vim
+ENV VIM_TAG v8.2.0318
+ENV VIM_VERSION 82
 WORKDIR /root
-RUN git clone https://github.com/vim/vim.git   && \
-    cd vim/src                                 && \
-    ./configure --enable-python3interp         && \
-    make install                               && \
+RUN git clone https://github.com/vim/vim.git                   && \
+    cd vim/src                                                 && \
+    git checkout -b "release/${VIM_VERSION}" "tags/${VIM_TAG}" && \
+    ./configure --enable-python3interp                         && \
+    make install                                               && \
     ln -s /usr/local/bin/vim /usr/local/bin/vi
 ENV EDITOR=vim
 
 # Install Golang
-ENV GOLANG_VERSION 1.13.4
+ENV GOLANG_VERSION 1.14
 RUN curl -L https://golang.org/dl/go${GOLANG_VERSION}.linux-amd64.tar.gz | \
         tar -C /usr/local -xzf -
 ENV GOPATH /go
 ENV PATH $GOPATH/bin:/usr/local/go/bin:$PATH
 
 # Install vim-go plugin (Go)
-ENV VIM_GO_VERSION v1.21
+ENV VIM_GO_VERSION v1.22
 RUN git clone https://github.com/fatih/vim-go.git                           \
-        /usr/local/share/vim/vim81/pack/plugins/start/vim-go             && \
-    cd /usr/local/share/vim/vim81/pack/plugins/start/vim-go              && \
+        /usr/local/share/vim/vim${VIM_VERSION}/pack/plugins/start/vim-go             && \
+    cd /usr/local/share/vim/vim${VIM_VERSION}/pack/plugins/start/vim-go              && \
     git checkout -b "release/${VIM_GO_VERSION}" "tags/${VIM_GO_VERSION}" && \
     vim -esN +GoInstallBinaries +q
 
 # Install YouCompleteMe plugin (Autocomplete)
-ENV VIM_YCM_VERSION bdbfdd938fe711ff75155546fc0a0e0bebcb952a
+ENV VIM_YCM_VERSION dd4a583e06f64751ac1439c30a9a40d82cdb741d
 RUN git clone https://github.com/Valloric/YouCompleteMe.git              \
-        /usr/local/share/vim/vim81/pack/plugins/start/YouCompleteMe   && \
-    cd /usr/local/share/vim/vim81/pack/plugins/start/YouCompleteMe    && \
+        /usr/local/share/vim/vim${VIM_VERSION}/pack/plugins/start/YouCompleteMe   && \
+    cd /usr/local/share/vim/vim${VIM_VERSION}/pack/plugins/start/YouCompleteMe    && \
     git checkout -b build "$VIM_YCM_VERSION"                          && \
     git submodule sync                                                && \
     git submodule update --init --recursive                           && \
     python3 ./install.py --go-completer
 
 # Install vim-fugitive (Git)
-ENV VIM_FUGITIVE_VERSION v3.0
+ENV VIM_FUGITIVE_VERSION v3.2
 RUN git clone https://github.com/tpope/vim-fugitive.git                                 \
-        /usr/local/share/vim/vim81/pack/plugins/start/vim-fugitive                   && \
-    cd /usr/local/share/vim/vim81/pack/plugins/start/vim-fugitive                    && \
+        /usr/local/share/vim/vim${VIM_VERSION}/pack/plugins/start/vim-fugitive                   && \
+    cd /usr/local/share/vim/vim${VIM_VERSION}/pack/plugins/start/vim-fugitive                    && \
     git checkout -b "release/${VIM_FUGITIVE_VERSION}" "tags/${VIM_FUGITIVE_VERSION}"
 
 # Install jellybeans (colorscheme)
-RUN curl -o /usr/local/share/vim/vim81/colors/jellybeans.vim \
+RUN curl -o /usr/local/share/vim/vim${VIM_VERSION}/colors/jellybeans.vim \
         https://raw.githubusercontent.com/nanotech/jellybeans.vim/master/colors/jellybeans.vim
 
 # Vimrc
 COPY vimrc /usr/local/share/vim/vimrc
 
 # Generate Vim help pages
-RUN vim -esN +helptags\ /usr/local/share/vim/vim81/pack/plugins/start/vim-go/doc        \
-             +helptags\ /usr/local/share/vim/vim81/pack/plugins/start/YouCompleteMe/doc \
-             +helptags\ /usr/local/share/vim/vim81/pack/plugins/start/vim-fugitive/doc  \
+RUN vim -esN +helptags\ /usr/local/share/vim/vim${VIM_VERSION}/pack/plugins/start/vim-go/doc        \
+             +helptags\ /usr/local/share/vim/vim${VIM_VERSION}/pack/plugins/start/YouCompleteMe/doc \
+             +helptags\ /usr/local/share/vim/vim${VIM_VERSION}/pack/plugins/start/vim-fugitive/doc  \
              +q
 
 # Create a local user matching the system user for toolbox style integration
