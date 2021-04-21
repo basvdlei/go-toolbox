@@ -11,10 +11,11 @@ ARG user_home=/home/$user_name
 ENV CONTAINER_USER_HOME=$user_home
 
 # Install build tools and plugin dependencies
-RUN apt-get update && \
+RUN echo "deb http://deb.debian.org/debian buster-backports main" > /etc/apt/sources.list.d/backports.list && \
+    apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y \
         build-essential \
-        cmake \
+        cmake/buster-backports \
         curl \
         git \
         libncurses-dev \
