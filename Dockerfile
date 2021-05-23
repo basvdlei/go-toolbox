@@ -26,7 +26,7 @@ RUN echo "deb http://deb.debian.org/debian buster-backports main" > /etc/apt/sou
    echo '%sudo	ALL=(ALL) NOPASSWD: ALL' > /etc/sudoers.d/root
 
 # Install Vim
-ENV VIM_TAG v8.2.2792
+ENV VIM_TAG v8.2.2879
 ENV VIM_VERSION 82
 WORKDIR /root
 RUN git clone https://github.com/vim/vim.git                   && \
