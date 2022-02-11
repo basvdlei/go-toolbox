@@ -55,7 +55,7 @@ RUN git clone https://github.com/fatih/vim-go.git                           \
     vim -esN +GoInstallBinaries +q
 
 # Install YouCompleteMe plugin (Autocomplete)
-ENV VIM_YCM_VERSION 9ee19df6bdfbda8e0e5771e117537963a8471cb5
+ENV VIM_YCM_VERSION 7684b6c6b49f8d3bdbd17ecdc9ee7d228039808e
 RUN git clone https://github.com/Valloric/YouCompleteMe.git              \
         /usr/local/share/vim/vim${VIM_VERSION}/pack/plugins/start/YouCompleteMe   && \
     cd /usr/local/share/vim/vim${VIM_VERSION}/pack/plugins/start/YouCompleteMe    && \
