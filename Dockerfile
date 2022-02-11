@@ -17,11 +17,12 @@ RUN apt-get update && \
         cmake \
         curl \
         git \
+        jq \
         libncurses-dev \
         libncurses6 \
         python3 \
         python3-dev \
-	sudo && \
+        sudo && \
    echo '%sudo	ALL=(ALL) NOPASSWD: ALL' > /etc/sudoers.d/root
 
 # Install Vim
