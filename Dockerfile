@@ -66,7 +66,7 @@ RUN git clone https://github.com/Valloric/YouCompleteMe.git              \
     python3 ./install.py --go-completer
 
 # Install vim-fugitive (Git)
-ENV VIM_FUGITIVE_VERSION v3.6
+ENV VIM_FUGITIVE_VERSION v3.7
 RUN git clone https://github.com/tpope/vim-fugitive.git                                 \
         /usr/local/share/vim/vim${VIM_VERSION}/pack/plugins/start/vim-fugitive                   && \
     cd /usr/local/share/vim/vim${VIM_VERSION}/pack/plugins/start/vim-fugitive                    && \
