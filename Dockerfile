@@ -55,16 +55,6 @@ RUN git clone https://github.com/fatih/vim-go.git                           \
     git checkout -b "release/${VIM_GO_VERSION}" "tags/${VIM_GO_VERSION}" && \
     vim -esN +GoInstallBinaries +q
 
-# Install YouCompleteMe plugin (Autocomplete)
-ENV VIM_YCM_VERSION 3ededaed2f9923d50bf3860ba8dace0f7d2724cd
-RUN git clone https://github.com/Valloric/YouCompleteMe.git              \
-        /usr/local/share/vim/vim${VIM_VERSION}/pack/plugins/start/YouCompleteMe   && \
-    cd /usr/local/share/vim/vim${VIM_VERSION}/pack/plugins/start/YouCompleteMe    && \
-    git checkout -b build "$VIM_YCM_VERSION"                          && \
-    git submodule sync                                                && \
-    git submodule update --init --recursive                           && \
-    python3 ./install.py --go-completer
-
 # Install vim-fugitive (Git)
 ENV VIM_FUGITIVE_VERSION v3.7
 RUN git clone https://github.com/tpope/vim-fugitive.git                                 \
@@ -76,6 +66,23 @@ RUN git clone https://github.com/tpope/vim-fugitive.git                         
 RUN curl -o /usr/local/share/vim/vim${VIM_VERSION}/colors/jellybeans.vim \
         https://raw.githubusercontent.com/nanotech/jellybeans.vim/master/colors/jellybeans.vim
 
+# Create a local user matching the system user for toolbox style integration
+RUN /usr/sbin/useradd -u "$CONTAINER_USER_ID"                       \
+                      -U -Gsudo -d "$CONTAINER_USER_HOME" -m        \
+                      -s /bin/bash "$CONTAINER_USER_NAME"        && \
+    chown -R "${CONTAINER_USER_ID}:${CONTAINER_USER_ID}" /go /usr/local/share/vim
+USER $CONTAINER_USER_NAME
+
+# Install YouCompleteMe plugin (Autocomplete)
+ENV VIM_YCM_VERSION d35df6136146b12f3a78f8b8fbdaf55f4e2ee462
+RUN git clone https://github.com/Valloric/YouCompleteMe.git              \
+        /usr/local/share/vim/vim${VIM_VERSION}/pack/plugins/start/YouCompleteMe   && \
+    cd /usr/local/share/vim/vim${VIM_VERSION}/pack/plugins/start/YouCompleteMe    && \
+    git checkout -b build "$VIM_YCM_VERSION"                          && \
+    git submodule sync                                                && \
+    git submodule update --init --recursive                           && \
+    python3 ./install.py --go-completer
+
 # Vimrc
 COPY vimrc /usr/local/share/vim/vimrc
 
@@ -85,9 +92,3 @@ RUN vim -esN +helptags\ /usr/local/share/vim/vim${VIM_VERSION}/pack/plugins/star
              +helptags\ /usr/local/share/vim/vim${VIM_VERSION}/pack/plugins/start/vim-fugitive/doc  \
              +q
 
-# Create a local user matching the system user for toolbox style integration
-RUN /usr/sbin/useradd -u "$CONTAINER_USER_ID"                       \
-                      -U -Gsudo -d "$CONTAINER_USER_HOME"           \
-                      -s /bin/bash "$CONTAINER_USER_NAME"        && \
-    chown -R "${CONTAINER_USER_ID}:${CONTAINER_USER_ID}" /go
-USER $CONTAINER_USER_NAME
