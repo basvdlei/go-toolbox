@@ -53,6 +53,9 @@ RUN git clone https://github.com/fatih/vim-go.git                           \
         /usr/local/share/vim/vim${VIM_VERSION}/pack/plugins/start/vim-go             && \
     cd /usr/local/share/vim/vim${VIM_VERSION}/pack/plugins/start/vim-go              && \
     git checkout -b "release/${VIM_GO_VERSION}" "tags/${VIM_GO_VERSION}" && \
+    git -c user.name='Anonymous' \
+        -c user.email='<>' \
+        cherry-pick 1718bd8af89b297601a02681c5791bdf40156572 && \
     vim -esN +GoInstallBinaries +q
 
 # Install vim-fugitive (Git)
