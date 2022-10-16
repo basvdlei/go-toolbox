@@ -77,7 +77,7 @@ RUN /usr/sbin/useradd -u "$CONTAINER_USER_ID"                       \
 USER $CONTAINER_USER_NAME
 
 # Install YouCompleteMe plugin (Autocomplete)
-ENV VIM_YCM_VERSION d4343e8384ffb25d70a9ebc966bbf1277735567c
+ENV VIM_YCM_VERSION 99ccab251fad7c8b235582b46752a0536d01b315
 RUN git clone https://github.com/Valloric/YouCompleteMe.git              \
         /usr/local/share/vim/vim${VIM_VERSION}/pack/plugins/start/YouCompleteMe   && \
     cd /usr/local/share/vim/vim${VIM_VERSION}/pack/plugins/start/YouCompleteMe    && \
