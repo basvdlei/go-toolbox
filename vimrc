@@ -1,6 +1,6 @@
 set nocompatible
 set encoding=utf-8
-"set noautochdir
+set autochdir
 set colorcolumn=80
 set history=1000
 set shell=/bin/bash
