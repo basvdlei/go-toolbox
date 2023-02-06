@@ -63,7 +63,7 @@ RUN git clone https://github.com/tpope/vim-fugitive.git                         
     git checkout -b "release/${VIM_FUGITIVE_VERSION}" "tags/${VIM_FUGITIVE_VERSION}"
 
 # Install vim-terraform (Terraform)
-ENV VIM_TERRAFORM_VERSION f0b17ac9f1bbdf3a29dba8b17ab429b1eed5d443
+ENV VIM_TERRAFORM_VERSION d00503de9bed3a1da7206090cb148c6a1acce870
 RUN git clone https://github.com/hashivim/vim-terraform.git                        \
         /usr/local/share/vim/vim${VIM_VERSION}/pack/plugins/start/vim-terraform && \
     cd /usr/local/share/vim/vim${VIM_VERSION}/pack/plugins/start/vim-terraform  && \
