@@ -92,6 +92,7 @@ RUN git clone https://github.com/Valloric/YouCompleteMe.git              \
 
 # Vimrc
 COPY vimrc /usr/local/share/vim/vimrc
+COPY vim-shell.sh /etc/bashrc
 
 # Generate Vim help pages
 RUN vim -esN +helptags\ /usr/local/share/vim/vim${VIM_VERSION}/pack/plugins/start/vim-go/doc        \
