@@ -1,4 +1,4 @@
-FROM registry.hub.docker.com/library/debian:bullseye
+FROM registry.hub.docker.com/library/debian:bookworm
 
 # Container build arguments
 ARG user_name=bas
