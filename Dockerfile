@@ -38,8 +38,8 @@ RUN git clone https://github.com/vim/vim.git                   && \
 ENV EDITOR=vim
 
 # Install Go
-ENV GOLANG_VERSION 1.22.1
-ENV GOLANG_SHA aab8e15785c997ae20f9c88422ee35d962c4562212bb0f879d052a35c8307c7f
+ENV GOLANG_VERSION 1.22.2
+ENV GOLANG_SHA 5901c52b7a78002aeff14a21f93e0f064f74ce1360fce51c6ee68cd471216a17
 RUN curl -L https://golang.org/dl/go${GOLANG_VERSION}.linux-amd64.tar.gz -o go.tar.gz && \
   echo "${GOLANG_SHA}  go.tar.gz" | sha256sum -c && \
   tar -C /usr/local -xzf go.tar.gz && \
