@@ -13,6 +13,7 @@ ENV CONTAINER_USER_HOME=$user_home
 # Install build tools and plugin dependencies
 RUN apt-get update && \
     DEBIAN_FRONTEND=noninteractive apt-get install -y \
+        bash-completion \
         build-essential \
         cmake \
         curl \

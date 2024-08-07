@@ -4,3 +4,5 @@ if [[ -n "$VIM_TERMINAL" ]]; then
 	}
 	PROMPT_COMMAND="_vim_sync_PWD;${PROMPT_COMMAND}"
 fi
+
+source /etc/profile.d/bash_completion.sh
