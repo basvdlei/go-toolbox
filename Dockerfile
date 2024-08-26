@@ -88,7 +88,7 @@ RUN git clone https://github.com/Valloric/YouCompleteMe.git              \
     cd /usr/local/share/vim/vim${VIM_VERSION}/pack/plugins/start/YouCompleteMe    && \
     git checkout -b build "$VIM_YCM_VERSION"                          && \
     git submodule sync                                                && \
-    git submodule update --init --recursive                           && \
+    git submodule update --init --remote --recursive                  && \
     python3 ./install.py --go-completer
 
 # Vimrc
