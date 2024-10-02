@@ -27,7 +27,7 @@ RUN apt-get update && \
    echo '%sudo	ALL=(ALL) NOPASSWD: ALL' > /etc/sudoers.d/root
 
 # Install Vim
-ENV VIM_TAG v9.1.0727
+ENV VIM_TAG v9.1.0754
 ENV VIM_VERSION 91
 WORKDIR /root
 RUN git clone https://github.com/vim/vim.git                   && \
