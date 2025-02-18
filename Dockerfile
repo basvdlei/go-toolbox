@@ -53,7 +53,7 @@ ENV VIM_GO_VERSION 6adc82bfef7f9a4b0db78065ae51b8ebb145c355
 RUN git clone https://github.com/fatih/vim-go.git                           \
         /usr/local/share/vim/vim${VIM_VERSION}/pack/plugins/start/vim-go             && \
     cd /usr/local/share/vim/vim${VIM_VERSION}/pack/plugins/start/vim-go              && \
-    git checkout -b "release/${VIM_GO_VERSION}" "tags/${VIM_GO_VERSION}" && \
+    git checkout -b build "${VIM_GO_VERSION}" && \
     vim -esN +GoInstallBinaries +q
 
 # Install vim-fugitive (Git)
@@ -62,7 +62,7 @@ ENV VIM_FUGITIVE_VERSION b068eaf1e6cbe35d1ac100d435cd7f7b74a5c87d
 RUN git clone https://github.com/tpope/vim-fugitive.git                                 \
         /usr/local/share/vim/vim${VIM_VERSION}/pack/plugins/start/vim-fugitive                   && \
     cd /usr/local/share/vim/vim${VIM_VERSION}/pack/plugins/start/vim-fugitive                    && \
-    git checkout -b "release/${VIM_FUGITIVE_VERSION}" "tags/${VIM_FUGITIVE_VERSION}"
+    git checkout -b build "${VIM_FUGITIVE_VERSION}"
 
 # Install vim-terraform (Terraform)
 ENV VIM_TERRAFORM_VERSION 8912ca1be3025a1c9fab193618f3b99517e01973
