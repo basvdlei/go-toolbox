@@ -58,8 +58,8 @@ RUN git clone https://github.com/fatih/vim-go.git                           \
     vim -esN +GoInstallBinaries +q
 
 # Install vim-fugitive (Git)
-# Version from 2025-02-19
-ENV VIM_FUGITIVE_VERSION 4a745ea72fa93bb15dd077109afbb3d1809383f2
+# Version from 2025-06-19
+ENV VIM_FUGITIVE_VERSION 593f831d6f6d779cbabb70a4d1e6b1b1936a88af
 RUN git clone https://github.com/tpope/vim-fugitive.git                                 \
         /usr/local/share/vim/vim${VIM_VERSION}/pack/plugins/start/vim-fugitive                   && \
     cd /usr/local/share/vim/vim${VIM_VERSION}/pack/plugins/start/vim-fugitive                    && \
