@@ -93,6 +93,8 @@ RUN git clone https://github.com/Valloric/YouCompleteMe.git              \
     git checkout -b build "$VIM_YCM_VERSION"                          && \
     git submodule sync                                                && \
     git submodule update --init --remote --recursive                  && \
+    # Hack in latest version of gopls due to issues with v0.16.2 and Go 1.25.0
+    sed -i "s^'\(golang.org/x/tools/gopls\)@.*'$^'\1@v0.20.0'^" third_party/ycmd/build.py && \
     python3 ./install.py --go-completer
 
 # Vimrc
