@@ -87,15 +87,14 @@ RUN /usr/sbin/useradd -u "$CONTAINER_USER_ID" \
 USER $CONTAINER_USER_NAME
 
 # Install YouCompleteMe plugin (Autocomplete)
-ENV VIM_YCM_VERSION 131b1827354871a4e984c1660b6af0fefca755c3
+# Version from 2025-11-16
+ENV VIM_YCM_VERSION d11e24d618f672333d788ec6c582c8f25b0b0092
 RUN git clone https://github.com/Valloric/YouCompleteMe.git \
         /usr/local/share/vim/vim${VIM_VERSION}/pack/plugins/start/YouCompleteMe \
     && cd /usr/local/share/vim/vim${VIM_VERSION}/pack/plugins/start/YouCompleteMe \
     && git checkout -b build "$VIM_YCM_VERSION" \
     && git submodule sync \
     && git submodule update --init --remote --recursive \
-    # Hack in latest version of gopls due to issues with v0.16.2 and Go 1.25.0
-    && sed -i "s^'\(golang.org/x/tools/gopls\)@.*'$^'\1@v0.20.0'^" third_party/ycmd/build.py \
     && python3 ./install.py --go-completer
 
 # Vimrc
