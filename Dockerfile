@@ -51,8 +51,8 @@ ENV GOPATH /go
 ENV PATH $GOPATH/bin:/usr/local/go/bin:$PATH
 
 # Install vim-go plugin (Go)
-# Version fom 2026-03-28
-ENV VIM_GO_VERSION f4b4ba17035aebcd222df90375c1cbb1dc4d8c5b
+# Version fom 2026-08-23
+ENV VIM_GO_VERSION 47694979496d4bf2e90ce75d95f1dec3f41cbefb
 RUN git clone https://github.com/fatih/vim-go.git \
         /usr/local/share/vim/vim${VIM_VERSION}/pack/plugins/start/vim-go \
     && cd /usr/local/share/vim/vim${VIM_VERSION}/pack/plugins/start/vim-go \
