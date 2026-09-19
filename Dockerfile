@@ -39,8 +39,8 @@ RUN git clone https://github.com/vim/vim.git \
 ENV EDITOR=vim
 
 # Install Go
-ENV GOLANG_VERSION 1.26.4
-ENV GOLANG_SHA 1153d3d50e0ac764b447adfe05c2bcf08e889d42a02e0fe0259bd47f6733ad7f
+ENV GOLANG_VERSION 1.27.1
+ENV GOLANG_SHA 63d339f0da5ab53635a56f2490a7984dfe12dfcff22ad749f63edaf590168445
 ENV GOLANG_URL https://golang.org/dl/go${GOLANG_VERSION}.linux-amd64.tar.gz
 
 RUN curl -L "${GOLANG_URL}" -o go.tar.gz \
